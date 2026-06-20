@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>เก็บข้อมูล</title>
+</head>  
+<body>
+    <p> โปรดระบุตามความเป็นจริง</p>
+    <form action="/form" method="POST" enctype="multipart/form-data" >
+        <label><b>sex :</b></label>
+    <br>
+    <input type="radio" id="opt11" name="choice" value="1">
+    <label for="opt11">male</label>
+    <br>
+    <input type="radio" id="opt12" name="choice" value="2">
+    <label for="opt12">Female</label>
+    <br>
+    <br>
+    <label><b>age :</b></label>
+    <br>
+    <input type="radio" id="opt21" name="choice2" value="3">
+    <label for="opt21">น้อยกว่า12</label>
+    <br>
+    <input type="radio" id="opt22" name="choice2" value="15">
+    <label for="opt22">12-24</label>
+    <br>
+    <input type="radio" id="opt23" name="choice2" value="7.5">
+    <label for="opt23">25-40</label>
+    <br>
+    <input type="radio" id="opt24" name="choice2" value="4.5">
+    <label for="opt24">41ขี้นไป</label>
+    <br>
+    <label><b>upload photo :</b></label>
+    <br>
+    <input type="file" name="acne_image" accept="image/*" capture="user" required>
+    <br>
+    <br>
+    <button type="submit">หน้าถัดไป</button>
+    </form>
+    <br>
+    <a href="/" >
+        <button type="button">กลับหน้าหลัก</button>
+    </a>
+
+</body>
+</html>

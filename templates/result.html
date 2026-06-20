@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>ผลลัพธ์การวิเคราะห์</title>
+</head>
+<body>
+    <h1>ผลลัพธ์การวิเคราะห์สภาพผิวและสิว</h1>
+    <hr>
+
+    <h2>1. ประเภทสิวที่ตรวจพบ</h2>
+    <ul>
+        {% for label, percentage in acne_results.items() %}
+            <li><strong>{{ label }}</strong>: {{ percentage }}%</li>
+        {% endfor %}
+    </ul>
+
+    {% if "ไม่พบสิว หรือสภาพผิวปกติ" in acne_results %}
+        <blockquote style="background-color: #f0f0f0; padding: 10px; border-left: 5px solid #ffcc00;">
+            <p style="color: red; font-weight: bold;">⚠️ ไม่พบสิวที่มีความมั่นใจสูงกว่า 50% หรือระบบไม่สามารถจำแนกสิวบนใบหน้าได้ชัดเจน</p>
+            <p>โปรดถ่ายรูปใหม่อีกครั้ง โดยให้ใบหน้าอยู่ในบริเวณที่มีแสงสว่างเพียงพอและเห็นหัวสิวชัดเจน</p>
+            <a href="/train"><button type="button">📸 ถ่ายรูปใหม่อีกครั้ง</button></a>
+        </blockquote>
+    {% else %}
+        <h3>💡 วิธีการดูแลรักษาสิวตามประเภทที่พบ:</h3>
+        <ul>
+            {% for label in acne_results.keys() %}
+                {% if label == "สิวอักเสบ" or label == "Acne Inflammation" %}
+                    <li><strong>แนวทางดูแล สิวอักเสบ:</strong> หลีกเลี่ยงการบีบหรือแกะสิวเด็ดขาด แนะนำให้ใช้ยาแต้มสิวที่มีส่วนผสมของ Benzoyl Peroxide หรือ Salicylic Acid และล้างหน้าให้สะอาดอย่างเบามือ</li>
+                {% elif label == "สิวอุดตัน" or label == "Comedones" %}
+                    <li><strong>แนวทางดูแล สิวอุดตัน:</strong> เน้นการผลัดเซลล์ผิวด้วยกลุ่ม AHA/BHA เลือกใช้สกินแคร์ที่ระบุว่า Non-Comedogenic (ไม่ก่อให้เกิดการอุดตัน) และล้างเครื่องสำอางออกให้หมดก่อนล้างหน้า</li>
+                {% elif label == "สิวผด" or label == "Papule" %}
+                    <li><strong>แนวทางดูแล สิวผด:</strong> พยายามหลีกเลี่ยงความร้อนและแสงแดดจัด งดการสครับขัดผิวหน้าชั่วคราว และเลือกใช้ผลิตภัณฑ์ที่ช่วยเสริมชั้นผิว (Ceramide) ให้แข็งแรง</li>
+                {% else %}
+                    <li><strong>แนวทางดูแลสิวทั่วไป:</strong> รักษาความสะอาดของใบหน้า เลือกใช้ผลิตภัณฑ์ที่อ่อนโยนต่อผิว และรักษาความชุ่มชื้นให้สมดุล</li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    <hr>
+
+    <h2>2. สัดส่วนปัจจัยที่กระตุ้นให้เกิดสิว (จากพฤติกรรมของคุณ)</h2>
+    <table border="1" cellpadding="8" style="border-collapse: collapse; width: 100%; max-width: 500px;">
+        <thead>
+            <tr style="background-color: #e6f7ff;">
+                <th>ปัจจัยเสี่ยง</th>
+                <th>สัดส่วน (%)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>ฮอร์โมน / อายุ / เพศ</td>
+                <td>{{ per_hor }}%</td>
+            </tr>
+            <tr>
+                <td>ความสะอาด (ปลอกหมอน/การล้างหน้า)</td>
+                <td>{{ per_cle }}%</td>
+            </tr>
+            <tr>
+                <td>พฤติกรรมการใช้ชีวิต (การนอน/การจับหน้า)</td>
+                <td>{{ per_lif }}%</td>
+            </tr>
+            <tr>
+                <td>พฤติกรรมการรับประทานอาหาร</td>
+                <td>{{ per_eat }}%</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <br><br>
+    <a href="/clear">
+        <button type="button" style="padding: 10px 20px; background-color: #4CAF50; color: white; border: none; cursor: pointer;">🏠 กลับหน้าหลัก (เริ่มประเมินใหม่)</button>
+    </a>
+</body>
+</html>
