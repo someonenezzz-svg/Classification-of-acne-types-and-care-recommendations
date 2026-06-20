@@ -61,7 +61,7 @@ def form():
                         for label, count in acne_counts.items():
                             acne_percentages[label] = round((count / total_acne_count) * 100, 2)
 
-                        for label in detected_labels:
+                        for label in acne_counts.keys:
                             if label in ["สิวขาว", "Whitehead"]:
                                 edge_scores["eat"] += 16
                                 edge_scores["hor"] += 20
@@ -102,9 +102,11 @@ def form():
 
 @app.route("/result", methods=["POST"])
 def result():
-    sex = request.form.get("sex") 
-    age = request.form.get("age")
+    sex = session.get("sex") 
+    age = session.get("age")
     acne_results = session.get('acne_percentages', {})
+
+    edge_scores = session.get('edge_scores', {"eat": 0, "hor": 0, "lif": 0, "cle": 0})
 
     per_hor = per_cle = per_lif = per_eat = 0
 
