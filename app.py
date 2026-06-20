@@ -3,9 +3,9 @@ import requests
 import os
 app = Flask(__name__)
 app.secret_key = "my_super_secret_key_for_acne_app"
-EI_API_KEY = "YOUR_EDGE_IMPULSE_API_KEY"
-EI_PROJECT_ID = "YOUR_PROJECT_ID"
-EI_URL = f"https://studio.edgeimpulse.com/v1/api/{EI_PROJECT_ID}/inference" #เปลี่ยนใส่ของตัวเอง
+EI_API_KEY = "ei_b1b1a85a460fdf6c4e951a34fb6dc0a34c155cd24139b7b8"
+EI_PROJECT_ID = "031060"
+EI_URL = f"https://studio.edgeimpulse.com/v1/api/031060/inference" #เปลี่ยนใส่ของตัวเอง
 
 @app.route("/")
 def home():
@@ -35,7 +35,7 @@ def form():
 
         if file and file.filename != '':
             try:
-                # อ่านไฟล์รูปเตรียมส่งแบบ binary
+                
                 files = {'data': (file.filename, file.read(), file.content_type)}
                 headers = {
                     "x-api-key": EI_API_KEY,
@@ -62,27 +62,27 @@ def form():
                             acne_percentages[label] = round((count / total_acne_count) * 100, 2)
 
                         for label in detected_labels:
-                            if label in ["สิวขาว", "Whitehead"]:
+                            if label in ["สิวขาว", "white"]:
                                 edge_scores["eat"] += 16
                                 edge_scores["hor"] += 20
                                 edge_scores["lif"] += 12
                                 edge_scores["cle"] += 18
-                            elif label in ["สิวดำ", "Blackhead"]:
+                            elif label in ["สิวดำ", "Black"]:
                                 edge_scores["eat"] += 12
                                 edge_scores["hor"] += 16
                                 edge_scores["lif"] += 10
                                 edge_scores["cle"] += 20
-                            elif label in ["ตุ่มแดง", "Papule"]:
+                            elif label in ["ตุ่มแดง", "papular"]:
                                 edge_scores["eat"] += 20
                                 edge_scores["hor"] += 18
                                 edge_scores["lif"] += 18
                                 edge_scores["cle"] += 14
-                            elif label in ["ตุ่มหนอง", "Pustule"]:
+                            elif label in ["ตุ่มหนอง", "pustular"]:
                                 edge_scores["eat"] += 20
                                 edge_scores["hor"] += 16
                                 edge_scores["lif"] += 20
                                 edge_scores["cle"] += 14
-                            elif label in ["ซีสต์", "Cyst"]:
+                            elif label in ["ซีสต์", "cystic"]:
                                 edge_scores["eat"] += 16
                                 edge_scores["hor"] += 20
                                 edge_scores["lif"] += 18
