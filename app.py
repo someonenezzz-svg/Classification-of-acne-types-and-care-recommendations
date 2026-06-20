@@ -35,7 +35,7 @@ def form():
 
         if file and file.filename != '':
             try:
-                # อ่านไฟล์รูปเตรียมส่งแบบ binary
+                
                 files = {'data': (file.filename, file.read(), file.content_type)}
                 headers = {
                     "x-api-key": EI_API_KEY,
@@ -53,7 +53,6 @@ def form():
                     
                     if total_acne_count > 0:
                         acne_counts = {}
-                        detected_labels = set()
                         for box in valid_acnes:
                             label = box.get("label", "Unknown")
                             acne_counts[label] = acne_counts.get(label, 0) + 1
@@ -98,6 +97,9 @@ def form():
         
         return render_template("form.html", sex=sex, age=age)
     
+    session['acne_percentages'] = acne_percentages
+    session['edge_scores'] = edge_scores
+
     return render_template("form.html")
 
 @app.route("/result", methods=["POST"])
@@ -117,13 +119,15 @@ def result():
         elif sex == "2":
             score_gender_specific = int(request.form.get("choice3", 0))
 
-        score_age = float(request.form.get("choice2", 0))
+        score_age = float(request.form.get("age", 0))
         score_pillow = float(request.form.get("choice4", 0))      
         score_cleansing = int(request.form.get("choice5", 0))   
         score_sleep = float(request.form.get("choice6", 0))      
         score_touch = int(request.form.get("choice7", 0))       
         score_sweet = int(request.form.get("choice8", 0))       
         score_greasy = int(request.form.get("choice9", 0))
+
+        edge_scores = session.get('edge_scores', {"eat": 0, "hor": 0, "lif": 0, "cle": 0})
 
         score_all = score_age + score_gender_specific + score_pillow + score_cleansing + score_sleep + score_touch + score_sweet + score_greasy + edge_scores["eat"] + edge_scores["hor"] + edge_scores["lif"] + edge_scores["cle"]
 
