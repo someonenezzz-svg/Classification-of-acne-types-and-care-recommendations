@@ -69,6 +69,7 @@ def form():
                             elif label == "papular": thai_label = "สิวตุ่มแดง"
                             elif label == "pustular": thai_label = "สิวตุ่มหนอง"
                             elif label == "cystic": thai_label = "สิวซีสต์"
+                            acne_percentages[thai_label] = round((count / total_acne_count) * 100, 2)
 
                         for label , count in acne_counts.items():
                             if label == "white":
@@ -102,18 +103,18 @@ def form():
 
             except Exception as e:
                 print(f"Error calling Edge Impulse API: {e}")
-        
+                acne_percentages = {"ไม่พบสิว หรือสภาพผิวปกติ": 100.0}
+
         session['acne_percentages'] = acne_percentages
         session['edge_scores'] = edge_scores
 
         return render_template("form.html", sex=sex, age=age)
-    
+        
     return render_template("form.html")
 
 @app.route("/result", methods=["POST"])
 def result():
     sex = session.get("sex") 
-    age = request.form.get("age")
     acne_results = session.get('acne_percentages', {})
 
     edge_scores = session.get('edge_scores', {"eat": 0, "hor": 0, "lif": 0, "cle": 0})
