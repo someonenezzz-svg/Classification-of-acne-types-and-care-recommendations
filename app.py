@@ -5,7 +5,7 @@ app = Flask(__name__)
 app.secret_key = "my_super_secret_key_for_acne_app"
 EI_API_KEY = "ei_b1b1a85a460fdf6c4e951a34fb6dc0a34c155cd24139b7b8"
 EI_PROJECT_ID = "031060"
-EI_URL = f"https://studio.edgeimpulse.com/v1/api/031060/inference" #เปลี่ยนใส่ของตัวเอง
+EI_URL = f"https://studio.edgeimpulse.com/studio/1031060" 
 
 @app.route("/")
 def home():
@@ -24,14 +24,16 @@ def form():
         acne_percentages = {}
 
         edge_scores = {
-            "eat": 0,    # ก
-            "hor": 0,    # ฮ
-            "lif": 0,    # พ
-            "cle": 0     # ส
+            "eat": 0,    
+            "hor": 0,    
+            "lif": 0,    
+            "cle": 0     
         }
 
-        if sex: session['sex'] = sex
-        if age: session['age'] = age
+        if sex:
+            session['sex'] = sex
+        if age: 
+            session['age'] = float(age)
 
         if file and file.filename != '':
             try:
@@ -53,36 +55,43 @@ def form():
                     
                     if total_acne_count > 0:
                         acne_counts = {}
-                        detected_labels = set()
                         for box in valid_acnes:
-                            label = box.get("label", "Unknown")
+                            label = box.get("label", "Unknown").lower()
                             acne_counts[label] = acne_counts.get(label, 0) + 1
                         
                         for label, count in acne_counts.items():
                             acne_percentages[label] = round((count / total_acne_count) * 100, 2)
+                        
+                        for label, count in acne_counts.items():
+                            thai_label = label
+                            if label == "white": thai_label = "สิวหัวขาว"
+                            elif label == "black": thai_label = "สิวหัวดำ"
+                            elif label == "papular": thai_label = "สิวตุ่มแดง"
+                            elif label == "pustular": thai_label = "สิวตุ่มหนอง"
+                            elif label == "cystic": thai_label = "สิวซีสต์"
 
-                        for label in detected_labels:
-                            if label in ["สิวขาว", "white"]:
+                        for label , count in acne_counts.items():
+                            if label == "white":
                                 edge_scores["eat"] += 16
                                 edge_scores["hor"] += 20
                                 edge_scores["lif"] += 12
                                 edge_scores["cle"] += 18
-                            elif label in ["สิวดำ", "Black"]:
+                            elif label == "black":
                                 edge_scores["eat"] += 12
                                 edge_scores["hor"] += 16
                                 edge_scores["lif"] += 10
                                 edge_scores["cle"] += 20
-                            elif label in ["ตุ่มแดง", "papular"]:
+                            elif label == "papular":
                                 edge_scores["eat"] += 20
                                 edge_scores["hor"] += 18
                                 edge_scores["lif"] += 18
                                 edge_scores["cle"] += 14
-                            elif label in ["ตุ่มหนอง", "pustular"]:
+                            elif label == "pustular":
                                 edge_scores["eat"] += 20
                                 edge_scores["hor"] += 16
                                 edge_scores["lif"] += 20
                                 edge_scores["cle"] += 14
-                            elif label in ["ซีสต์", "cystic"]:
+                            elif label == "cystic":
                                 edge_scores["eat"] += 16
                                 edge_scores["hor"] += 20
                                 edge_scores["lif"] += 18
@@ -95,16 +104,19 @@ def form():
                 print(f"Error calling Edge Impulse API: {e}")
         
         session['acne_percentages'] = acne_percentages
-        
+        session['edge_scores'] = edge_scores
+
         return render_template("form.html", sex=sex, age=age)
     
     return render_template("form.html")
 
 @app.route("/result", methods=["POST"])
 def result():
-    sex = request.form.get("sex") 
+    sex = session.get("sex") 
     age = request.form.get("age")
     acne_results = session.get('acne_percentages', {})
+
+    edge_scores = session.get('edge_scores', {"eat": 0, "hor": 0, "lif": 0, "cle": 0})
 
     per_hor = per_cle = per_lif = per_eat = 0
 
@@ -115,6 +127,8 @@ def result():
         elif sex == "2":
             score_gender_specific = int(request.form.get("choice3", 0))
 
+        score_age = session.get("age_score", 0.0)
+
         score_age = float(request.form.get("choice2", 0))
         score_pillow = float(request.form.get("choice4", 0))      
         score_cleansing = int(request.form.get("choice5", 0))   
@@ -123,7 +137,12 @@ def result():
         score_sweet = int(request.form.get("choice8", 0))       
         score_greasy = int(request.form.get("choice9", 0))
 
-        score_all = score_age + score_gender_specific + score_pillow + score_cleansing + score_sleep + score_touch + score_sweet + score_greasy + edge_scores["eat"] + edge_scores["hor"] + edge_scores["lif"] + edge_scores["cle"]
+        score_all = (score_age + score_gender_specific + 
+                     score_pillow + score_cleansing + 
+                     score_sleep + score_touch + 
+                     score_sweet + score_greasy + 
+                     edge_scores["eat"] + edge_scores["hor"] + 
+                     edge_scores["lif"] + edge_scores["cle"] )
 
         if score_all > 0:
             per_all = score_all/100
