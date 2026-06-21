@@ -102,6 +102,8 @@ def form():
 
                 else:
                     acne_percentages = {"เกิดข้อผิดพลาดในการเชื่อมต่อโมเดล": 100.0}
+                    print(f"❌ Edge Impulse Error! Status Code: {response.status_code}")
+                    print(f"📋 Error Details: {response.text}")
 
             except Exception as e:
                 print(f"Error calling Edge Impulse API: {e}")
