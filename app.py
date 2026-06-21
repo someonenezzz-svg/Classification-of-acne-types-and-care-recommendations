@@ -100,61 +100,83 @@ def form():
                     else:
                         acne_percentages = {"ไม่พบสิว หรือสภาพผิวปกติ": 100.0}
 
+                else:
+                    acne_percentages = {"เกิดข้อผิดพลาดในการเชื่อมต่อโมเดล": 100.0}
+
             except Exception as e:
                 print(f"Error calling Edge Impulse API: {e}")
                 acne_percentages = {"ไม่พบสิว หรือสภาพผิวปกติ": 100.0}
 
-        session['acne_percentages'] = acne_percentages
+        else:
+            acne_percentages = {"ไม่ได้อัปโหลดรูปภาพ": 100.0}
+            
+        session['acne_results'] = acne_percentages
         session['edge_scores'] = edge_scores
 
         return render_template("form.html", sex=sex, age=age)
         
     return render_template("form.html")
 
-@app.route("/result", methods=["POST"])
+@app.route("/result", methods=["GET","POST"])
 def result():
     sex = session.get("sex") 
-    acne_results = session.get('acne_percentages', {})
+    acne_results = session.get('acne_results', {})
 
     edge_scores = session.get('edge_scores', {"eat": 0, "hor": 0, "lif": 0, "cle": 0})
 
     per_hor = per_cle = per_lif = per_eat = 0
 
     try:
-        score_gender_specific = 0
-        if sex == "1":
-            score_gender_specific = int(request.form.get("choice0", 0)) 
-        elif sex == "2":
-            score_gender_specific = int(request.form.get("choice3", 0))
+        if request.method == "POST":
+            score_gender_specific = 0
+            if sex == "1":
+                score_gender_specific = int(request.form.get("choice0", 0)) 
+            elif sex == "2":
+                score_gender_specific = int(request.form.get("choice3", 0))
 
-        score_age = session.get("age_score", 0.0)
+            score_age = session.get("age_score", 0.0)
 
-        score_age = session.get("age", 0.0)
-        score_pillow = float(request.form.get("choice4", 0))      
-        score_cleansing = int(request.form.get("choice5", 0))   
-        score_sleep = float(request.form.get("choice6", 0))      
-        score_touch = int(request.form.get("choice7", 0))       
-        score_sweet = int(request.form.get("choice8", 0))       
-        score_greasy = int(request.form.get("choice9", 0))
+            score_age = session.get("age", 0.0)
+            score_pillow = float(request.form.get("choice4", 0))      
+            score_cleansing = int(request.form.get("choice5", 0))   
+            score_sleep = float(request.form.get("choice6", 0))      
+            score_touch = int(request.form.get("choice7", 0))       
+            score_sweet = int(request.form.get("choice8", 0))       
+            score_greasy = int(request.form.get("choice9", 0))
 
-        score_all = (score_age + score_gender_specific + 
-                     score_pillow + score_cleansing + 
-                     score_sleep + score_touch + 
-                     score_sweet + score_greasy + 
-                     edge_scores["eat"] + edge_scores["hor"] + 
-                     edge_scores["lif"] + edge_scores["cle"] )
+            score_age = session.get("age", 0.0)
 
-        if score_all > 0:
-            per_all = score_all/100
-            sco_hor = score_age + score_gender_specific + edge_scores["hor"]
-            per_hor = round((sco_hor / per_all), 2)
-            sco_cle = score_pillow + score_cleansing + edge_scores["cle"]
-            per_cle = round((sco_cle / per_all), 2)
-            sco_lif = score_sleep + score_touch + edge_scores["lif"]
-            per_lif = round((sco_lif / per_all), 2)
-            sco_eat = score_sweet + score_greasy + edge_scores["eat"]
-            per_eat = round((sco_eat / per_all), 2)
+            score_all = (score_age + score_gender_specific + 
+                        score_pillow + score_cleansing + 
+                        score_sleep + score_touch + 
+                        score_sweet + score_greasy + 
+                        edge_scores["eat"] + edge_scores["hor"] + 
+                        edge_scores["lif"] + edge_scores["cle"] )
 
+            if score_all > 0:
+                per_all = score_all/100
+                sco_hor = score_age + score_gender_specific + edge_scores["hor"]
+                per_hor = round((sco_hor / per_all), 2)
+                
+                sco_cle = score_pillow + score_cleansing + edge_scores["cle"]
+                per_cle = round((sco_cle / per_all), 2)
+
+                sco_lif = score_sleep + score_touch + edge_scores["lif"]
+                per_lif = round((sco_lif / per_all), 2)
+
+                sco_eat = score_sweet + score_greasy + edge_scores["eat"]
+                per_eat = round((sco_eat / per_all), 2)
+
+                session['per_hor'] = per_hor
+                session['per_cle'] = per_cle
+                session['per_lif'] = per_lif
+                session['per_eat'] = per_eat
+        else:
+            
+            per_hor = session.get('per_hor', 0)
+            per_cle = session.get('per_cle', 0)
+            per_lif = session.get('per_lif', 0)
+            per_eat = session.get('per_eat', 0)
 
     except Exception as e:
         print(f" Error in calculation: {e}")   
