@@ -56,12 +56,11 @@ def form():
                     if total_acne_count > 0:
                         acne_counts = {}
                         for box in valid_acnes:
-                            label = box.get("label", "Unknown").lower()
+                            label = box.get("label", "Unknown").strip().lower()
                             acne_counts[label] = acne_counts.get(label, 0) + 1
                         
-                        for label, count in acne_counts.items():
-                            acne_percentages[label] = round((count / total_acne_count) * 100, 2)
-                        
+                        acne_percentages = {}
+
                         for label, count in acne_counts.items():
                             thai_label = label
                             if label == "white": thai_label = "สิวหัวขาว"
@@ -130,7 +129,7 @@ def result():
 
         score_age = session.get("age_score", 0.0)
 
-        score_age = float(request.form.get("choice2", 0))
+        score_age = session.get("age", 0.0)
         score_pillow = float(request.form.get("choice4", 0))      
         score_cleansing = int(request.form.get("choice5", 0))   
         score_sleep = float(request.form.get("choice6", 0))      
