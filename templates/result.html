@@ -1,95 +1,190 @@
 <!DOCTYPE html>
-<html>
+<html lang="th">
 <head>
     <meta charset="UTF-8">
-    <title>ผลลัพธ์การวิเคราะห์</title>
+    <title>Skin Analytics - result</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        :root {
+            --primary-color: #2d6a4f;
+            --secondary-color: #40916c;
+            --bg-color: #f4f9f4;
+            --text-color: #1b4332;
+            --card-bg: #ffffff;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 2rem 0;
+            display: flex;
+            justify-content: center;
+        }
+        .container {
+            background: var(--card-bg);
+            padding: 2.5rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(45, 106, 79, 0.08);
+            max-width: 650px;
+            width: 90%;
+        }
+        h1 {
+            color: var(--primary-color);
+            text-align: center;
+            font-size: 1.6rem;
+            margin-bottom: 1.5rem;
+        }
+        h2 {
+            color: var(--primary-color);
+            font-size: 1.2rem;
+            border-bottom: 2px solid #edf6ed;
+            padding-bottom: 0.5rem;
+            margin-top: 2rem;
+        }
+        ul {
+            padding-left: 1.2rem;
+            line-height: 1.6;
+        }
+        li {
+            margin-bottom: 0.8rem;
+        }
+        .warning-box {
+            background-color: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 1.5rem 0;
+            color: #856404;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.02);
+        }
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+        }
+        th {
+            background-color: #e8f5e9;
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+        tr {
+            border-bottom: 1px solid #edf6ed;
+        }
+        tr:last-child {
+            border-bottom: none;
+        }
+        .btn {
+            display: block;
+            text-align: center;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 14px;
+            font-size: 1rem;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            text-decoration: none;
+            margin-top: 2.5rem;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(45, 106, 79, 0.2);
+        }
+        .btn:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+        .btn-retry {
+            background-color: #ffc107;
+            color: #333;
+            padding: 8px 18px;
+            border-radius: 20px;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+    </style>
 </head>
 <body>
-    <h1>ผลลัพธ์การวิเคราะห์สภาพผิวและสิว</h1>
-    <hr>
+    <div class="container">
+        <h1>🔍 ผลการวิเคราะห์สภาพผิวและสิว</h1>
 
-    <h2>1. ประเภทสิวที่ตรวจพบ</h2>
-    <ul>
-        {% for label, percentage in acne_results.items() %}
-            <li><strong>{{ label }}</strong>: {{ percentage }}%</li>
-        {% endfor %}
-    </ul>
-
-    {% if "ไม่พบสิว หรือสภาพผิวปกติ" in acne_results %}
-        <blockquote style="background-color: #f0f0f0; padding: 10px; border-left: 5px solid #ffcc00;">
-            <p style="color: red; font-weight: bold;">⚠️ ไม่พบสิวที่มีความมั่นใจสูงกว่า 50% หรือระบบไม่สามารถจำแนกสิวบนใบหน้าได้ชัดเจน</p>
-            <p>โปรดถ่ายรูปใหม่อีกครั้ง โดยให้ใบหน้าอยู่ในบริเวณที่มีแสงสว่างเพียงพอและเห็นหัวสิวชัดเจน</p>
-            <a href="/train"><button type="button">📸 ถ่ายรูปใหม่อีกครั้ง</button></a>
-        </blockquote>
-    {% else %}
-        <h3>💡 ลักษณะและวิธีการดูแลรักษาสิวตามประเภทที่พบ:</h3>
+        <h2>1. ประเภทสิวที่ตรวจพบ</h2>
         <ul>
-            {% for label in acne_results.keys() %}
-                {% if label == "สิวหัวขาว" or label == "white" %}
-                    <li><strong>ลักษณะของสิวหัวขาว:</strong> ตุ่มนูนสีขาวขนาดเล็กใต้ผิวหนัง ไม่มีหัวสิวเปิดออกมา บีบออกยากเพราะมีรากสิวลึก และหากไม่รักษาอาจพัฒนาเป็นสิวอักเสบได้</li>
-                    <br>
-                    <li><strong>แนวทางดูแล สิวหัวขาว:</strong> ใช้ยาทาเฉพาะที่ เช่น เรตินอยด์ (Retinoids), กรดอะเซลาอิก หรือกำมะถัน เพื่อสลายการอุดตัน ร่วมกับการกดสิวโดยผู้เชี่ยวชาญ หรือทำหัตถการอย่างการผลัดเซลล์ผิวด้วยกรดผลไม้(AHA)</li>
-                    <br><br>
-                {% elif label == "สิวหัวดำ" or label == "Black" %}
-                    <li><strong>ลักษณะของสิวดำ:</strong> ตุ่มสีดำเล็กๆ ที่มองเห็นหัวสิวเปิดออกสู่ผิวหนัง สีดำเกิดจากน้ำมันอุดตันทำปฏิกิริยากับออกซิเจนในอากาศ</li>
-                    <br>
-                    <li><strong>แนวทางดูแล สิวหัวดำ:</strong> ใช้ยาลดการอุดตันในปริมาณที่เหมาะสม เช่น กรดซาลิไซลิก (Salicylic acid) การกดสิว หรือการกรอผิวด้วยเกล็ดอัญมณีเพื่อผลัดเซลล์ผิว</li>
-                    <br><br>
-                {% elif label == "สิวซีสต์" or label == "cystic" %}
-                    <li><strong>ลักษณะของสิวซีสต์:</strong> ก้อนนูนแดงขนาดใหญ่ ภายในเป็นโพรงหนองปนเลือด มีหลายหัวกระจุกตัวรวมกันเป็นไตแข็ง</li>
-                    <br>
-                    <li><strong>แนวทางดูแล สิวซีสต์:</strong> เนื่องจากเป็นสิวชนิดรุนแรง แหล่งข้อมูลระบุว่าควรรับการรักษาจากแพทย์ผิวหนังเท่านั้น</li>
-                    <br><br>
-                {% elif label == "สิวตุ่มแดง" or label == "papular" %}
-                    <li><strong>ลักษณะของสิวตุ่มแดง:</strong> ตุ่มนูนแดงขนาดเล็ก กดแล้วรู้สึกเจ็บ ไม่มีหัวหนอง</li>
-                    <br>
-                    <li><strong>แนวทางดูแล สิวตุ่มแดง:</strong> ล้างหน้าด้วยผลิตภัณฑ์อ่อนโยน งดการสครับหรือขัดผิวหน้า ใช้ยาแต้มสิวเพื่อลดการอักเสบ หรือใช้การบำบัดด้วยแสง LED Light Therapy (แสงสีฟ้า) </li>
-                    <br><br>
-                {% elif label == "สิวตุ่มหนอง" or label == "pustular" %}
-                    <li><strong>ลักษณะของสิวตุุ่มหนอง:</strong> ตุ่มแดงที่มี หัวหนองสีขาวหรือเหลือง อยู่ตรงกลางตุ่ม เกิดจากการติดเชื้อแบคทีเรียแทรกซ้อน</li>
-                    <br>
-                    <li><strong>แนวทางดูแล สิวตุ่มหนอง:</strong> ใช้ยาแต้มสิว และหลีกเลี่ยงการบีบหรือแกะสิวเองเพราะจะทำให้รอยโรคลาม</li>
-                    <br><br>
-                {% else %}
-                    <li><strong>แนวทางดูแลสิวทั่วไป:</strong> รักษาความสะอาดของใบหน้า เลือกใช้ผลิตภัณฑ์ที่อ่อนโยนต่อผิว และรักษาความชุ่มชื้นให้สมดุล</li>
-                {% endif %}
+            {% for label, percentage in acne_results.items() %}
+                <li><strong>🎯 {{ label }}</strong>: {{ percentage }}%</li>
             {% endfor %}
         </ul>
-    {% endif %}
 
-    <hr>
+        {% if "ไม่พบสิว หรือสภาพผิวปกติ" in acne_results %}
+            <div class="warning-box">
+                <p style="font-weight: bold; margin-top: 0;">⚠️ ไม่พบสิวที่มีความมั่นใจสูงกว่า 50% หรือระบบไม่สามารถจำแนกสิวได้ชัดเจน</p>
+                <p style="margin-bottom: 15px;">โปรดถ่ายรูปใหม่อีกครั้ง โดยให้ใบหน้าอยู่ในบริเวณที่มีแสงสว่างเพียงพอและเห็นหัวสิวชัดเจนครับ</p>
+                <a href="/train" class="btn-retry">📸 ถ่ายรูปใหม่อีกครั้ง</a>
+            </div>
+        {% else %}
+            <h3 style="color: var(--secondary-color); margin-top: 1.5rem;">💡 ลักษณะและวิธีการดูแลรักษาตามประเภทที่พบ:</h3>
+            <ul>
+                {% for label in acne_results.keys() %}
+                    {% if label == "สิวหัวขาว" or label == "white" %}
+                        <li><strong>ขาว - ลักษณะ:</strong> ตุ่มนูนสีขาวขนาดเล็กใต้ผิวหนัง ไม่มีหัวสิวเปิดออก บีบออกยากเพราะรากสิวลึก เสี่ยงอักเสบได้ง่าย</li>
+                        <li><strong>ขาว - วิธีดูแล:</strong> ใช้ยาทาเฉพาะที่กลุ่มเรตินอยด์ (Retinoids) หรือกรดอะเซลาอิก และควรผลัดเซลล์ผิวด้วย AHA</li>
+                    {% elif label == "สิวหัวดำ" or label == "Black" %}
+                        <li><strong>ดำ - ลักษณะ:</strong> ตุ่มสีดำเล็กๆ หัวสิวเปิด สีดำเกิดจากน้ำมันอุดตันทำปฏิกิริยากับออกซิเจนในอากาศ</li>
+                        <li><strong>ดำ - วิธีดูแล:</strong> ใช้ผลิตภัณฑ์ที่มีกรดซาลิไซลิก (Salicylic acid) หรือการกดสิวอย่างถูกวิธีเพื่อผลัดเซลล์ผิว</li>
+                    {% elif label == "สิวซีสต์" or label == "cystic" %}
+                        <li><strong>ซีสต์ - ลักษณะ:</strong> ก้อนนูนแดงขนาดใหญ่ เป็นโพรงหนองปนเลือด มีหลายหัวกระจุกกัน เป็นไตแข็งและเจ็บมาก</li>
+                        <li><strong>ซีสต์ - วิธีดูแล:</strong> เป็นสิวชนิดรุนแรง แนะนำให้เข้าพบแพทย์ผิวหนังเพื่อรับการรักษาที่ถูกต้องเท่านั้นครับ</li>
+                    {% elif label == "สิวตุ่มแดง" or label == "papular" %}
+                        <li><strong>ตุ่มแดง - ลักษณะ:</strong> ตุ่มนูนแดงขนาดเล็ก กดแล้วเจ็บ แต่ยังไม่มีหัวหนองชัดเจน</li>
+                        <li><strong>ตุ่มแดง - วิธีดูแล:</strong> ล้างหน้าด้วยสูตรอ่อนโยน งดสครับหน้า และใช้ยาแต้มสิวลดการอักเสบ หรือทำ LED Light Therapy</li>
+                    {% elif label == "สิวตุ่มหนอง" or label == "pustular" %}
+                        <li><strong>ตุ่มหนอง - ลักษณะ:</strong> ตุ่มแดงที่มีหัวหนองสีขาวหรือเหลืองตรงกลาง เกิดจากการติดเชื้อแบคทีเรียซ้ำซ้อน</li>
+                        <li><strong>ตุ่มหนอง - วิธีดูแล:</strong> ใช้ยาแต้มสิวลดการติดเชื้อ หลีกเลี่ยงการบีบแกะเองเด็ดขาดป้องกันแผลเป็นลึก</li>
+                    {% else %}
+                        <li><strong>ทั่วไป - วิธีดูแล:</strong> รักษาความสะอาด เลือกผลิตภัณฑ์ที่อ่อนโยนต่อผิว และรักษาความชุ่มชื้นให้สมดุลเสมอ</li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        {% endif %}
 
-    <h2>2. สัดส่วนปัจจัยที่กระตุ้นให้เกิดสิว (จากพฤติกรรมของคุณ)</h2>
-    <table border="1" cellpadding="8" style="border-collapse: collapse; width: 100%; max-width: 500px;">
-        <thead>
-            <tr style="background-color: #e6f7ff;">
-                <th>ปัจจัยเสี่ยง</th>
-                <th>สัดส่วน (%)</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>ฮอร์โมน</td>
-                <td>{{ per_hor }}%</td>
-            </tr>
-            <tr>
-                <td>ความสะอาด </td>
-                <td>{{ per_cle }}%</td>
-            </tr>
-            <tr>
-                <td>พฤติกรรมการใช้ชีวิต</td>
-                <td>{{ per_lif }}%</td>
-            </tr>
-            <tr>
-                <td>พฤติกรรมการรับประทานอาหาร</td>
-                <td>{{ per_eat }}%</td>
-            </tr>
-        </tbody>
-    </table>
+        <h2>2. สัดส่วนปัจจัยที่กระตุ้นให้เกิดสิว (จากพฤติกรรมของคุณ)</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>🧬 ปัจจัยเสี่ยง</th>
+                    <th>📊 สัดส่วน (%)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>🧬 ฮอร์โมน</td>
+                    <td><strong>{{ per_hor }}%</strong></td>
+                </tr>
+                <tr>
+                    <td>🧼 ความสะอาด</td>
+                    <td><strong>{{ per_cle }}%</strong></td>
+                </tr>
+                <tr>
+                    <td>🏃 พฤติกรรมการใช้ชีวิต</td>
+                    <td><strong>{{ per_lif }}%</strong></td>
+                </tr>
+                <tr>
+                    <td>🍰 พฤติกรรมการรับประทานอาหาร</td>
+                    <td><strong>{{ per_eat }}%</strong></td>
+                </tr>
+            </tbody>
+        </table>
 
-    <br><br>
-    <a href="/clear">
-        <button type="button" style="padding: 10px 20px; background-color: #4CAF50; color: white; border: none; cursor: pointer;">🏠 กลับหน้าหลัก (เริ่มประเมินใหม่)</button>
-    </a>
+        <a href="/clear" class="btn">🏠 เริ่มประเมินใหม่</a>
+    </div>
 </body>
 </html>

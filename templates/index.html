@@ -1,13 +1,77 @@
 <!DOCTYPE html>
-<html>
+<html lang="th">
 <head>
-    <title>home</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skin Analytics - Home</title>
+    <style>
+        :root {
+            --primary-color: #2d6a4f;
+            --secondary-color: #40916c;
+            --bg-color: #f4f9f4;
+            --text-color: #1b4332;
+            --card-bg: #ffffff;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            text-align: center;
+            background: var(--card-bg);
+            padding: 2.5rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(45, 106, 79, 0.08);
+            max-width: 500px;
+            width: 90%;
+            transition: transform 0.3s ease;
+        }
+        .container:hover {
+            transform: translateY(-5px);
+        }
+        h1 {
+            color: var(--primary-color);
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            line-height: 1.4;
+        }
+        p {
+            color: #52b788;
+            font-size: 0.95rem;
+            margin-bottom: 2rem;
+        }
+        .btn {
+            display: inline-block;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px 35px;
+            font-size: 1rem;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(45, 106, 79, 0.2);
+        }
+        .btn:hover {
+            background-color: var(--secondary-color);
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(45, 106, 79, 0.3);
+        }
+    </style>
 </head>
 <body>
-    <h1>ประเภทของสิวและการแนะนำในการดูแลพร้อมทำนายปัจจัยการเกิด</h1>
-    <p>web side นี้ เป็นส่วนหนึ่งของนวัตกรรม ใช้เพื่อการศึกษา</p>
-    <a href="/train" >
-        <button type="button">Let'start</button>
-    </a>
+    <div class="container">
+        <h1>✨ วิเคราะห์ประเภทสิว <br>& ทำนายปัจจัยผิวเสี่ยง 🌿</h1>
+        <p>นวัตกรรมเพื่อการศึกษาและวิเคราะห์สภาพผิวเบื้องต้น</p>
+        <a href="/train" class="btn">🚀 Let's Start</a>
+    </div>
 </body>
 </html>

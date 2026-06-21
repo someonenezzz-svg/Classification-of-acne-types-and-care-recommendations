@@ -1,45 +1,165 @@
 <!DOCTYPE html>
-<html>
+<html lang="th">
 <head>
-    <title>เก็บข้อมูล</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skin Analytics - Info & Photo</title>
+    <style>
+        :root {
+            --primary-color: #2d6a4f;
+            --secondary-color: #40916c;
+            --bg-color: #f4f9f4;
+            --text-color: #1b4332;
+            --card-bg: #ffffff;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 2rem 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            background: var(--card-bg);
+            padding: 2.5rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(45, 106, 79, 0.08);
+            max-width: 450px;
+            width: 90%;
+        }
+        h2 {
+            color: var(--primary-color);
+            text-align: center;
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+        }
+        .info-text {
+            text-align: center;
+            color: #74c69d;
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+        }
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        label.section-title {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 0.8rem;
+            color: var(--primary-color);
+        }
+        .radio-option {
+            background: #f8fbf8;
+            border: 1px solid #d8ebd8;
+            padding: 10px 15px;
+            border-radius: 10px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .radio-option:hover {
+            background: #edf6ed;
+            border-color: var(--secondary-color);
+        }
+        .radio-option input {
+            margin-right: 10px;
+            accent-color: var(--primary-color);
+        }
+        input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            background: #f8fbf8;
+            border: 2px dashed #b7e4c7;
+            border-radius: 10px;
+            box-sizing: border-box;
+            cursor: pointer;
+        }
+        .btn-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 2rem;
+        }
+        .btn {
+            padding: 12px;
+            font-size: 1rem;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+            width: 100%;
+        }
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            box-shadow: 0 4px 15px rgba(45, 106, 79, 0.2);
+        }
+        .btn-primary:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+        .btn-secondary {
+            background-color: transparent;
+            color: #52b788;
+            border: 2px solid #52b788;
+        }
+        .btn-secondary:hover {
+            background: #edf6ed;
+        }
+    </style>
 </head>  
 <body>
-    <p> โปรดระบุตามความเป็นจริง</p>
-    <form action="/form" method="POST" enctype="multipart/form-data" >
-        <label><b>sex :</b></label>
-    <br>
-    <input type="radio" id="opt11" name="choice" value="1">
-    <label for="opt11">male</label>
-    <br>
-    <input type="radio" id="opt12" name="choice" value="2">
-    <label for="opt12">Female</label>
-    <br>
-    <br>
-    <label><b>age :</b></label>
-    <br>
-    <input type="radio" id="opt21" name="choice2" value="3">
-    <label for="opt21">น้อยกว่า12</label>
-    <br>
-    <input type="radio" id="opt22" name="choice2" value="15">
-    <label for="opt22">12-24</label>
-    <br>
-    <input type="radio" id="opt23" name="choice2" value="7.5">
-    <label for="opt23">25-40</label>
-    <br>
-    <input type="radio" id="opt24" name="choice2" value="4.5">
-    <label for="opt24">41ขี้นไป</label>
-    <br>
-    <label><b>upload photo :</b></label>
-    <br>
-    <input type="file" name="acne_image" accept="image/*" capture="user" required>
-    <br>
-    <br>
-    <button type="submit">หน้าถัดไป</button>
-    </form>
-    <br>
-    <a href="/" >
-        <button type="button">กลับหน้าหลัก</button>
-    </a>
+    <div class="container">
+        <h2>📝 ข้อมูลเบื้องต้นของคุณ</h2>
+        <p class="info-text">โปรดระบุข้อมูลตามความเป็นจริงเพื่อความแม่นยำ 💚</p>
+        
+        <form action="/form" method="POST" enctype="multipart/form-data">
+            <div class="form-group">
+                <label class="section-title">👤 เพศ (Sex)</label>
+                <label class="radio-option">
+                    <input type="radio" name="choice" value="1" required> Male
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="choice" value="2"> Female
+                </label>
+            </div>
 
+            <div class="form-group">
+                <label class="section-title">🎂 อายุ (Age)</label>
+                <label class="radio-option">
+                    <input type="radio" name="choice2" value="3" required> น้อยกว่า 12 ปี
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="choice2" value="15"> 12-24 ปี
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="choice2" value="7.5"> 25-40 ปี
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="choice2" value="4.5"> 41 ปีขึ้นไป
+                </label>
+            </div>
+
+            <div class="form-group">
+                <label class="section-title">📸 อัปโหลดรูปภาพใบหน้า</label>
+                <input type="file" name="acne_image" accept="image/*" capture="user" required>
+            </div>
+
+            <div class="btn-group">
+                <button type="submit" class="btn btn-primary">ถัดไป ➡️</button>
+                <a href="/" class="btn btn-secondary">🏠 กลับหน้าหลัก</a>
+            </div>
+        </form>
+    </div>
 </body>
 </html>

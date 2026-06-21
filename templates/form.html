@@ -1,128 +1,191 @@
 <!DOCTYPE html>
-<html>
+<html lang="th">
     <head>
-        <title>form</title>
+        <title>Skin Analytics - form</title>
+        <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skin Analytics - Behavioral Quiz</title>
+    <style>
+        :root {
+            --primary-color: #2d6a4f;
+            --secondary-color: #40916c;
+            --bg-color: #f4f9f4;
+            --text-color: #1b4332;
+            --card-bg: #ffffff;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 2rem 0;
+            display: flex;
+            justify-content: center;
+        }
+        .container {
+            background: var(--card-bg);
+            padding: 2.5rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(45, 106, 79, 0.08);
+            max-width: 600px;
+            width: 90%;
+        }
+        h2 {
+            color: var(--primary-color);
+            text-align: center;
+            margin-bottom: 0.5rem;
+        }
+        .subtitle {
+            text-align: center;
+            color: #74c69d;
+            margin-bottom: 2rem;
+            font-size: 0.95rem;
+        }
+        .question-block {
+            margin-bottom: 2rem;
+            background: #fafdfa;
+            padding: 1.5rem;
+            border-radius: 15px;
+            border-left: 5px solid var(--secondary-color);
+        }
+        .question-title {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+            font-size: 1.05rem;
+        }
+        .radio-option {
+            display: flex;
+            align-items: center;
+            background: white;
+            border: 1px solid #e2efe2;
+            padding: 12px;
+            border-radius: 10px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .radio-option:hover {
+            background: #edf6ed;
+            border-color: var(--secondary-color);
+            transform: translateX(3px);
+        }
+        .radio-option input {
+            margin-right: 12px;
+            accent-color: var(--primary-color);
+        }
+        .btn-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 2rem;
+        }
+        .btn {
+            flex: 1;
+            padding: 14px;
+            font-size: 1rem;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            box-shadow: 0 4px 15px rgba(45, 106, 79, 0.2);
+        }
+        .btn-primary:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+        .btn-secondary {
+            background-color: transparent;
+            color: #52b788;
+            border: 2px solid #52b788;
+        }
+        .btn-secondary:hover {
+            background: #edf6ed;
+        }
+    </style>
     </head>
     <body>
-        <p> โปรดระบุตามความเป็นจริง</p>
-        <form action="/result" method="POST" enctype="multipart/form-data" >
-            {% if sex == "1"%}
-                <label><b>สภาพผิวหน้าของคุณช่วงนี้หรืออาการหลังโกนหนวดเป็นอย่างไรบ้าง</b></label>
-                <br>
-                <input type="radio" id="opt01" name="choice0" value="15">
-                <label for="opt01">หน้ามันและมีสิวเม็ดใหญ่ ขึ้นหลังโกนหนวด</label>
-                <br>
-                <input type="radio" id="opt02" name="choice0" value="10">
-                <label for="opt02">หน้ามันและมีสิวเม็ดใหญ่ขึ้นบ่อยๆ ไม่เกี่ยวกับการโกน</label>
-                <br>
-                <input type="radio" id="opt03" name="choice0" value="5">
-                <label for="opt03">หน้ามันปกติ แต่ชอบมีผื่นแดงหรือสิวเม็ดเล็ก</label>
-                <br>
-                <input type="radio" id="opt04" name="choice0" value="0">
-                <label for="opt04">หน้ามันปกติ ไม่มีสิว </label>
-            {% elif sex == "2"%}
-                <label><b>ประจำเดือนของคุณจะมาเมื่อไหร่</b></label>
-                <br>
-                <input type="radio" id="opt31" name="choice3" value="12">
-                <label for="opt31">กำลังมีประจำเดือน</label>
-                <br>
-                <input type="radio" id="opt32" name="choice3" value="15">
-                <label for="opt32">อีกประมาณ1สัปดาห์</label>
-                <br>
-                <input type="radio" id="opt33" name="choice3" value="3">
-                <label for="opt33">เพิ่งหมดไป</label>
-                <br>
-                <input type="radio" id="opt44" name="choice3" value="0">
-                <label for="opt34">ไม่อยู่ในกลุ่มนี้</label>
+        <div class="container">
+        <h2>📊 ประเมินพฤติกรรมเพิ่มเติม</h2>
+        <p class="subtitle">คำถามอีกเล็กน้อยเพื่อวิเคราะห์ปัจจัยกระตุ้นสิวของคุณ 🧠</p>
+        
+        <form action="/result" method="POST" enctype="multipart/form-data">
+            
+            {% if sex == "1" %}
+            <div class="question-block">
+                <span class="question-title">🪒 สภาพผิวหน้าของคุณช่วงนี้หรืออาการหลังโกนหนวดเป็นอย่างไรบ้าง</span>
+                <label class="radio-option"><input type="radio" name="choice0" value="15" required> หน้ามันและมีสิวเม็ดใหญ่ ขึ้นหลังโกนหนวด</label>
+                <label class="radio-option"><input type="radio" name="choice0" value="10"> หน้ามันและมีสิวเม็ดใหญ่ขึ้นบ่อยๆ ไม่เกี่ยวกับการโกน</label>
+                <label class="radio-option"><input type="radio" name="choice0" value="5"> หน้ามันปกติ แต่ชอบมีผื่นแดงหรือสิวเม็ดเล็ก</label>
+                <label class="radio-option"><input type="radio" name="choice0" value="0"> หน้ามันปกติ ไม่มีสิว</label>
+            </div>
+            {% elif sex == "2" %}
+            <div class="question-block">
+                <span class="question-title">🩸 ประจำเดือนของคุณจะมาเมื่อไหร่</span>
+                <label class="radio-option"><input type="radio" name="choice3" value="12" required> กำลังมีประจำเดือน</label>
+                <label class="radio-option"><input type="radio" name="choice3" value="15"> อีกประมาณ 1 สัปดาห์</label>
+                <label class="radio-option"><input type="radio" name="choice3" value="3"> เพิ่งหมดไป</label>
+                <label class="radio-option"><input type="radio" name="choice3" value="0"> ไม่อยู่ในกลุ่มนี้</label>
+            </div>
             {% endif %}
-            <br>
-            <br>
-            <label><b>คุณเปลี่ยนปลอกหมอน/ผ้าขนหนูบ่อยแค่ไหน</b></label>
-            <br>
-            <input type="radio" id="opt41" name="choice4" value="0">
-            <label for="opt41">ทุก2-3วัน </label>
-            <br>
-            <input type="radio" id="opt42" name="choice4" value="3.75">
-            <label for="opt42">อาทิตย์ละครั้ง</label>
-            <br>
-            <input type="radio" id="opt43" name="choice4" value="11.25">
-            <label for="opt43">สองอาทิตย์ครั้ง</label>
-            <br>
-            <input type="radio" id="opt44" name="choice4" value="15">
-            <label for="opt44">นานกว่านี้ </label>
-            <br>
-            <br>
-            <label><b>การแต่งหน้าและการล้างหน้า</b></label>
-            <br>
-            <input type="radio" id="opt51" name="choice5" value="3">
-            <label for="opt51">ใช้คุชชั่น/รองพื้น ล้างด้วยคลีนซิ่ง+โฟม</label>
-            <br>
-            <input type="radio" id="opt52" name="choice5" value="15">
-            <label for="opt52">ใช้คุชชั่น/รองพื้น ล้างด้วยโฟม</label>
-            <br>
-            <input type="radio" id="opt53" name="choice5" value="0">
-            <label for="opt53">ไม่ทา ล้างด้วยโฟม</label>
-            <br>
-            <input type="radio" id="opt54" name="choice5" value="6">
-            <label for="opt54">ไม่ทา ล้างน้ำเปล่า </label>
-            <br>
-            <br>
-            <label><b>เวลาเข้านอน</b></label>
-            <br>
-            <input type="radio" id="opt61" name="choice6" value="0">
-            <label for="opt61">ก่อน22:00</label>
-            <br>
-            <input type="radio" id="opt62" name="choice6" value="3.75">
-            <label for="opt62">22:00-00:00</label>
-            <br>
-            <input type="radio" id="opt63" name="choice6" value="15">
-            <label for="opt63">หลัง00:00</label>
-            <br>
-            <br>
-            <label><b>พฤติกรรมการบีบ/แกะ </b></label>
-            <br>
-            <input type="radio" id="opt71" name="choice7" value="15">
-            <label for="opt71">รู้สึกเจ็บ ระบบ ปวดตื้อๆ </label>
-            <br>
-            <input type="radio" id="opt72" name="choice7" value="15">
-            <label for="opt72">รู้สึกคันยิบๆ ยิ่งเวลาอากาศร้อนหรือเหงื่อออกยิ่งอยากเกา</label>
-            <br>
-            <input type="radio" id="opt73" name="choice7" value="10">
-            <label for="opt73">ไม่เจ็บไม่คัน แต่ชอบเอามือไปจับ หร่อบีบสิวบ่อยๆ</label>
-            <br>
-            <input type="radio" id="opt74" name="choice7" value="0">
-            <label for="opt74">ไม่เจ็บไม่คัน พยายามไม่เอามือไปสัมผัสใบหน้า</label>
-            <br>
-            <br>
-            <label><b>ช่วงนี้คุณทานของหวาน เบเกอรี่ นมวัว หรือชานม บ่อยแค่ไหน</b></label>
-            <br>
-            <input type="radio" id="opt81" name="choice8" value="15">
-            <label for="opt81">ทานแทบทุกวัน</label>
-            <br>
-            <input type="radio" id="opt82" name="choice8" value="5">
-            <label for="opt82">สัปดาห์ละ 2-3 ครั้ง</label>
-            <br>
-            <input type="radio" id="opt83" name="choice8" value="0">
-            <label for="opt83">ทานน้อยมาก</label>
-            <br>
-            <br>
-            <label><b>ช่วงนี้พฤติกรรมการทานอาหารทอด อาหารมันหรืออาหารรสจัด/ชาบู เป็นอย่างไร</b></label>
-            <br>
-            <input type="radio" id="opt91" name="choice9" value="15">
-            <label for="opt91">ทานเป็นประจำ </label>
-            <br>
-            <input type="radio" id="opt92" name="choice9" value="5">
-            <label for="opt92">มีของทอดบ้างบางมื้อ</label>
-            <br>
-            <input type="radio" id="opt93" name="choice9" value="0">
-            <label for="opt93">เน้นทานอาหารคลีน </label>
-            <button type="submit">ดูผลลัพธ์</button>
+
+            <div class="question-block">
+                <span class="question-title">🛏️ คุณเปลี่ยนปลอกหมอน/ผ้าขนหนูบ่อยแค่ไหน</span>
+                <label class="radio-option"><input type="radio" name="choice4" value="0" required> ทุก 2-3 วัน</label>
+                <label class="radio-option"><input type="radio" name="choice4" value="3.75"> อาทิตย์ละครั้ง</label>
+                <label class="radio-option"><input type="radio" name="choice4" value="11.25"> สองอาทิตย์ครั้ง</label>
+                <label class="radio-option"><input type="radio" name="choice4" value="15"> นานกว่านี้</label>
+            </div>
+
+            <div class="question-block">
+                <span class="question-title">🧼 การแต่งหน้าและการล้างหน้า</span>
+                <label class="radio-option"><input type="radio" name="choice5" value="3" required> ใช้คุชชั่น/รองพื้น ล้างด้วยคลีนซิ่ง+โฟม</label>
+                <label class="radio-option"><input type="radio" name="choice5" value="15"> ใช้คุชชั่น/รองพื้น ล้างด้วยโฟม</label>
+                <label class="radio-option"><input type="radio" name="choice5" value="0"> ไม่ทา ล้างด้วยโฟม</label>
+                <label class="radio-option"><input type="radio" name="choice5" value="6"> ไม่ทา ล้างน้ำเปล่า</label>
+            </div>
+
+            <div class="question-block">
+                <span class="question-title">⏰ เวลาเข้านอน</span>
+                <label class="radio-option"><input type="radio" name="choice6" value="0" required> ก่อน 22:00</label>
+                <label class="radio-option"><input type="radio" name="choice6" value="3.75"> 22:00 - 00:00</label>
+                <label class="radio-option"><input type="radio" name="choice6" value="15"> หลัง 00:00</label>
+            </div>
+
+            <div class="question-block">
+                <span class="question-title">🚫 พฤติกรรมการบีบ/แกะ</span>
+                <label class="radio-option"><input type="radio" name="choice7" value="15" required> รู้สึกเจ็บ ระบม ปวดตื้อๆ</label>
+                <label class="radio-option"><input type="radio" name="choice7" value="15"> รู้สึกคันยิบๆ ยิ่งเวลาอากาศร้อนหรือเหงื่อออกยิ่งอยากเกา</label>
+                <label class="radio-option"><input type="radio" name="choice7" value="10"> ไม่เจ็บไม่คัน แต่ชอบเอามือไปจับ หรือบีบสิวบ่อยๆ</label>
+                <label class="radio-option"><input type="radio" name="choice7" value="0"> 不เจ็บไม่คัน พยายามไม่เอามือไปสัมผัสใบหน้า</label>
+            </div>
+
+            <div class="question-block">
+                <span class="question-title">🧋 ช่วงนี้คุณทานของหวาน เบเกอรี่ นมวัว หรือชานม บ่อยแค่ไหน</span>
+                <label class="radio-option"><input type="radio" name="choice8" value="15" required> ทานแทบทุกวัน</label>
+                <label class="radio-option"><input type="radio" name="choice8" value="5"> สัปดาห์ละ 2-3 ครั้ง</label>
+                <label class="radio-option"><input type="radio" name="choice8" value="0"> ทานน้อยมาก</label>
+            </div>
+
+            <div class="question-block">
+                <span class="question-title">🍳 พฤติกรรมการทานอาหารทอด อาหารมัน หรือรสจัด/ชาบู</span>
+                <label class="radio-option"><input type="radio" name="choice9" value="15" required> ทานเป็นประจำ</label>
+                <label class="radio-option"><input type="radio" name="choice9" value="5"> มีของทอดบ้างบางมื้อ</label>
+                <label class="radio-option"><input type="radio" name="choice9" value="0"> เน้นทานอาหารคลีน</label>
+            </div>
+
+            <div class="btn-group">
+                <a href="/" class="btn btn-secondary">กลับหน้าหลัก</a>
+                <button type="submit" class="btn btn-primary">ดูผลลัพธ์ 🔍</button>
+            </div>
         </form>
-        <br>
-        <a href="/" >
-            <button type="button">กลับหน้าหลัก</button>
-        </a>
-
-
+    </div>
     </body>
 </html>
