@@ -157,7 +157,7 @@ def result():
                 per_all = score_all/100
                 sco_hor = score_age + score_gender_specific + edge_scores["hor"]
                 per_hor = round((sco_hor / per_all), 2)
-                
+
                 sco_cle = score_pillow + score_cleansing + edge_scores["cle"]
                 per_cle = round((sco_cle / per_all), 2)
 
