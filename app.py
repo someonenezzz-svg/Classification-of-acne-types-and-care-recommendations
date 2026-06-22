@@ -51,7 +51,7 @@ def form():
                 
                 print(f"Edge Impulse Status: {response.status_code}")
 
-                if response.status_code == 200:
+                if response.status_code == 400:
                     result_data = response.json()
                     
                     bounding_boxes = result_data.get("results", [])
