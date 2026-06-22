@@ -53,7 +53,6 @@ def form():
                     result_data = response.json()
                     
                     bounding_boxes = []
-                    # ดักจับโครงสร้าง JSON Object Detection ของ Edge Impulse ให้แม่นยำครบถ้วน
                     if "classifier" in result_data and "results" in result_data["classifier"]:
                         bounding_boxes = result_data["classifier"]["results"]
                     elif "results" in result_data:
@@ -74,7 +73,6 @@ def form():
                 if total_acne_count > 0:
                     acne_counts = {}
                     for box in valid_acnes:
-                        # เอา .lower() ออก เพื่อรองรับ "Black" พิมพ์ใหญ่ และ string ตัวเลข 1, 2, 3, 4
                         label = box.get("label", "Unknown").strip()
                         acne_counts[label] = acne_counts.get(label, 0) + 1
                     
@@ -85,20 +83,20 @@ def form():
                         thai_label = label
                         if label == "Black": 
                             thai_label = "สิวหัวดำ"
-                        elif label == "white": 
+                        elif label == "1": 
                             thai_label = "สิวหัวขาว"
-                        elif label == "papular": 
+                        elif label == "2": 
                             thai_label = "สิวตุ่มแดง"
-                        elif label == "pustular": 
+                        elif label == "3": 
                             thai_label = "สิวตุ่มหนอง"
-                        elif label == "cystic": 
+                        elif label == "4": 
                             thai_label = "สิวซีสต์"
                         
                         acne_percentages[thai_label] = round((count / total_acne_count) * 100, 2)
 
-                    
+                   
                     for label, count in acne_counts.items():
-                        if label == "white": 
+                        if label == "1": 
                             edge_scores["eat"] += (16 * count)
                             edge_scores["hor"] += (20 * count)
                             edge_scores["lif"] += (12 * count)
@@ -108,17 +106,17 @@ def form():
                             edge_scores["hor"] += (16 * count)
                             edge_scores["lif"] += (10 * count)
                             edge_scores["cle"] += (20 * count)
-                        elif label == "papular": 
+                        elif label == "2": 
                             edge_scores["eat"] += (20 * count)
                             edge_scores["hor"] += (18 * count)
                             edge_scores["lif"] += (18 * count)
                             edge_scores["cle"] += (14 * count)
-                        elif label == "pustular": 
+                        elif label == "3": 
                             edge_scores["eat"] += (20 * count)
                             edge_scores["hor"] += (16 * count)
                             edge_scores["lif"] += (20 * count)
                             edge_scores["cle"] += (14 * count)
-                        elif label == "cystic": 
+                        elif label == "4": 
                             edge_scores["eat"] += (16 * count)
                             edge_scores["hor"] += (20 * count)
                             edge_scores["lif"] += (18 * count)
@@ -187,7 +185,6 @@ def result():
                 session['per_lif'] = per_lif
                 session['per_eat'] = per_eat
             else:
-                # แก้ไขจุดเติมบล็อก else ป้องกันตัวแปรตกหล่นเมื่อคะแนนรวมเป็น 0
                 per_hor = per_cle = per_lif = per_eat = 0
                 session['per_hor'] = session['per_cle'] = session['per_lif'] = session['per_eat'] = 0
         else:
