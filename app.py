@@ -62,7 +62,7 @@ def form():
                     elif "bounding_boxes" in result_data:
                         bounding_boxes = result_data["bounding_boxes"]
 
-                    # 📉 ปรับความไวลงเหลือ 0.3 เพื่อป้องกันกรณี AI ตรวจเจอสิวแต่ให้คะแนนความมั่นใจต่ำ
+                    
                     valid_acnes = [box for box in bounding_boxes if box.get("value", 0) > 0.3]
                     total_acne_count = len(valid_acnes)
                 
@@ -74,13 +74,13 @@ def form():
                 if total_acne_count > 0:
                     acne_counts = {}
                     for box in valid_acnes:
-                        # ใช้ .lower() แปลงเป็นพิมพ์เล็กทั้งหมดเพื่อป้องกันบั๊กพิมพ์เล็ก-ใหญ่ไม่ตรงกัน
+                        
                         label = box.get("label", "Unknown").strip().lower()
                         acne_counts[label] = acne_counts.get(label, 0) + 1
                     
                     acne_percentages = {}
 
-                    # 🎯 จับคู่ข้อความพิมพ์เล็ก แปลงเป็นภาษาไทย
+                    
                     for label, count in acne_counts.items():
                         thai_label = label
                         if label == "black": 
@@ -96,7 +96,7 @@ def form():
                         
                         acne_percentages[thai_label] = round((count / total_acne_count) * 100, 2)
 
-                    # 📊 คำนวณคะแนนพฤติกรรมเสี่ยงจากข้อความพิมพ์เล็ก
+                   
                     for label, count in acne_counts.items():
                         if label == "white": 
                             edge_scores["eat"] += (16 * count)
