@@ -5,7 +5,7 @@ app = Flask(__name__)
 app.secret_key = "my_super_secret_key_for_acne_app"
 EI_API_KEY = "ei_b1b1a85a460fdf6c4e951a34fb6dc0a34c155cd24139b7b8"
 EI_PROJECT_ID = "1031060"
-EI_URL = f"https://studio.edgeimpulse.com/v1/api/1031060/inference"
+EI_URL = f"https://studio.edgeimpulse.com/v1/api/1031060/classify"
 
 @app.route("/")
 def home():
