@@ -5,7 +5,7 @@ app = Flask(__name__)
 app.secret_key = "my_super_secret_key_for_acne_app"
 EI_API_KEY = "ei_b1b1a85a460fdf6c4e951a34fb6dc0a34c155cd24139b7b8"
 EI_PROJECT_ID = "1031060"
-EI_URL = f"https://studio.edgeimpulse.com/v1/api/1031060/deployment/webasm/hosted/inference" 
+EI_URL = f"https://studio.edgeimpulse.com/v1/api/1031060/classify" 
 
 @app.route("/")
 def home():
@@ -38,6 +38,11 @@ def form():
         if file and file.filename != '':
             try:
                 
+                file.seek(0)
+                files = {
+                    'image': (file.filename, file.read(), file.mimetype)
+                }
+
                 files = {'data': (file.filename, file.read(), file.content_type)}
                 headers = {
                     "x-api-key": EI_API_KEY,
@@ -45,6 +50,8 @@ def form():
                 }
                 
                 response = requests.post(EI_URL, headers=headers, files=files)
+                
+                print(f"Edge Impulse Status: {response.status_code}")
                 
                 if response.status_code == 200:
                     result_data = response.json()
