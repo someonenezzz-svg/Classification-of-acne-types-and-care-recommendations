@@ -40,7 +40,7 @@ def form():
                 
                 file.seek(0)
                 files = {
-                    'image': (file.filename, file.read(), file.mimetype)
+                    'data' : (file.filename, file.read(), file.mimetype)
                 }
 
                 files = {'data': (file.filename, file.read(), file.content_type)}
@@ -52,7 +52,7 @@ def form():
                 response = requests.post(EI_URL, headers=headers, files=files)
                 
                 print(f"Edge Impulse Status: {response.status_code}")
-                
+
                 if response.status_code == 200:
                     result_data = response.json()
                     bounding_boxes = result_data.get("results", [])
