@@ -62,7 +62,8 @@ def form():
                     elif "bounding_boxes" in result_data:
                         bounding_boxes = result_data["bounding_boxes"]
 
-                    valid_acnes = [box for box in bounding_boxes if box.get("value", 0) > 0.5]
+                    # 📉 ปรับความไวลงเหลือ 0.3 เพื่อป้องกันกรณี AI ตรวจเจอสิวแต่ให้คะแนนความมั่นใจต่ำ
+                    valid_acnes = [box for box in bounding_boxes if box.get("value", 0) > 0.3]
                     total_acne_count = len(valid_acnes)
                 
                 else:
@@ -73,50 +74,51 @@ def form():
                 if total_acne_count > 0:
                     acne_counts = {}
                     for box in valid_acnes:
-                        label = box.get("label", "Unknown").strip()
+                        # ใช้ .lower() แปลงเป็นพิมพ์เล็กทั้งหมดเพื่อป้องกันบั๊กพิมพ์เล็ก-ใหญ่ไม่ตรงกัน
+                        label = box.get("label", "Unknown").strip().lower()
                         acne_counts[label] = acne_counts.get(label, 0) + 1
                     
                     acne_percentages = {}
 
-                    
+                    # 🎯 จับคู่ข้อความพิมพ์เล็ก แปลงเป็นภาษาไทย
                     for label, count in acne_counts.items():
                         thai_label = label
-                        if label == "Black": 
+                        if label == "black": 
                             thai_label = "สิวหัวดำ"
-                        elif label == "1": 
+                        elif label == "white": 
                             thai_label = "สิวหัวขาว"
-                        elif label == "2": 
+                        elif label == "papular": 
                             thai_label = "สิวตุ่มแดง"
-                        elif label == "3": 
+                        elif label == "pustular": 
                             thai_label = "สิวตุ่มหนอง"
-                        elif label == "4": 
+                        elif label == "cystic": 
                             thai_label = "สิวซีสต์"
                         
                         acne_percentages[thai_label] = round((count / total_acne_count) * 100, 2)
 
-                   
+                    # 📊 คำนวณคะแนนพฤติกรรมเสี่ยงจากข้อความพิมพ์เล็ก
                     for label, count in acne_counts.items():
-                        if label == "1": 
+                        if label == "white": 
                             edge_scores["eat"] += (16 * count)
                             edge_scores["hor"] += (20 * count)
                             edge_scores["lif"] += (12 * count)
                             edge_scores["cle"] += (18 * count)
-                        elif label == "Black":
+                        elif label == "black":
                             edge_scores["eat"] += (12 * count)
                             edge_scores["hor"] += (16 * count)
                             edge_scores["lif"] += (10 * count)
                             edge_scores["cle"] += (20 * count)
-                        elif label == "2": 
+                        elif label == "papular": 
                             edge_scores["eat"] += (20 * count)
                             edge_scores["hor"] += (18 * count)
                             edge_scores["lif"] += (18 * count)
                             edge_scores["cle"] += (14 * count)
-                        elif label == "3": 
+                        elif label == "pustular": 
                             edge_scores["eat"] += (20 * count)
                             edge_scores["hor"] += (16 * count)
                             edge_scores["lif"] += (20 * count)
                             edge_scores["cle"] += (14 * count)
-                        elif label == "4": 
+                        elif label == "cystic": 
                             edge_scores["eat"] += (16 * count)
                             edge_scores["hor"] += (20 * count)
                             edge_scores["lif"] += (18 * count)
