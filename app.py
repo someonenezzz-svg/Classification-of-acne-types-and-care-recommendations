@@ -5,7 +5,7 @@ app = Flask(__name__)
 app.secret_key = "my_super_secret_key_for_acne_app"
 EI_API_KEY = "ei_b1b1a85a460fdf6c4e951a34fb6dc0a34c155cd24139b7b8"
 EI_PROJECT_ID = "1031060"
-EI_URL = f"https://studio.edgeimpulse.com/v1/api/1031060/classify" 
+EI_URL = f"https://studio.edgeimpulse.com/v1/api/1031060/inference"
 
 @app.route("/")
 def home():
@@ -37,26 +37,31 @@ def form():
 
         if file and file.filename != '':
             try:
-                
                 file.seek(0)
-                files = {
-                    'data' : (file.filename, file.read(), file.mimetype)
-                }
-
-                files = {'data': (file.filename, file.read(), file.content_type)}
+                
+                image_data = file.read()
+                
                 headers = {
                     "x-api-key": EI_API_KEY,
+                    "Content-Type": file.mimetype if file.mimetype else "image/jpeg",
                     "Accept": "application/json"
                 }
                 
-                response = requests.post(EI_URL, headers=headers, files=files)
+                response = requests.post(EI_URL, data=image_data, headers=headers)
                 
                 print(f"Edge Impulse Status: {response.status_code}")
 
                 if response.status_code == 200:
                     result_data = response.json()
+                    
                     bounding_boxes = result_data.get("results", [])
                     
+                    if not bounding_boxes and "result" in result_data:
+                        bounding_boxes = result_data["result"].get("bounding_boxes", [])
+
+                    if not bounding_boxes:
+                        bounding_boxes = result_data.get("bounding_boxes", [])
+
                     valid_acnes = [box for box in bounding_boxes if box.get("value", 0) > 0.5]
                     total_acne_count = len(valid_acnes)
                     
