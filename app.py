@@ -3,13 +3,11 @@ import requests
 import os
 
 app = Flask(__name__)
-
 app.secret_key = "my_super_secret_key_for_acne_app"
-
 
 EI_API_KEY = "ei_b1b1a85a460fdf6c4e951a34fb6dc0a34c155cd24139b7b8"
 EI_PROJECT_ID = "1031060"
-EI_URL = f"https://studio.edgeimpulse.com/v1/api/1031060/inference"
+EI_URL = f"https://studio.edgeimpulse.com/v1/api/1031060/classifier/predict"
 
 @app.route("/")
 def home():
@@ -27,21 +25,13 @@ def form():
         file = request.files.get("acne_image")
         
         acne_percentages = {}
-        
-        edge_scores = {
-            "eat": 0,    
-            "hor": 0,    
-            "lif": 0,    
-            "cle": 0     
-        }
+        edge_scores = {"eat": 0, "hor": 0, "lif": 0, "cle": 0}
 
-        
         if sex:
             session['sex'] = sex
         if age: 
             session['age'] = float(age)
 
-        
         if file and file.filename != '':
             try:
                 file.seek(0)
@@ -62,30 +52,30 @@ def form():
                 if status_code == 200:
                     result_data = response.json()
                     
-                   
                     bounding_boxes = []
-                    if "results" in result_data:
+                    # ดักจับโครงสร้าง JSON Object Detection ของ Edge Impulse ให้แม่นยำครบถ้วน
+                    if "classifier" in result_data and "results" in result_data["classifier"]:
+                        bounding_boxes = result_data["classifier"]["results"]
+                    elif "results" in result_data:
                         bounding_boxes = result_data["results"]
                     elif "result" in result_data and "bounding_boxes" in result_data["result"]:
                         bounding_boxes = result_data["result"]["bounding_boxes"]
                     elif "bounding_boxes" in result_data:
                         bounding_boxes = result_data["bounding_boxes"]
 
-                    
                     valid_acnes = [box for box in bounding_boxes if box.get("value", 0) > 0.5]
                     total_acne_count = len(valid_acnes)
                 
                 else:
-                    
                     print(f"Edge Impulse API Error status: {status_code}")
                     valid_acnes = []
                     total_acne_count = 0
 
-                
                 if total_acne_count > 0:
                     acne_counts = {}
                     for box in valid_acnes:
-                        label = box.get("label", "Unknown").strip().lower()
+                        # เอา .lower() ออก เพื่อรองรับ "Black" พิมพ์ใหญ่ และ string ตัวเลข 1, 2, 3, 4
+                        label = box.get("label", "Unknown").strip()
                         acne_counts[label] = acne_counts.get(label, 0) + 1
                     
                     acne_percentages = {}
@@ -93,55 +83,57 @@ def form():
                     
                     for label, count in acne_counts.items():
                         thai_label = label
-                        if label == "white": thai_label = "สิวหัวขาว"
-                        elif label == "black": thai_label = "สิวหัวดำ"
-                        elif label == "papular": thai_label = "สิวตุ่มแดง"
-                        elif label == "pustular": thai_label = "สิวตุ่มหนอง"
-                        elif label == "cystic": thai_label = "สิวซีสต์"
+                        if label == "Black": 
+                            thai_label = "สิวหัวดำ"
+                        elif label == "white": 
+                            thai_label = "สิวหัวขาว"
+                        elif label == "papular": 
+                            thai_label = "สิวตุ่มแดง"
+                        elif label == "pustular": 
+                            thai_label = "สิวตุ่มหนอง"
+                        elif label == "cystic": 
+                            thai_label = "สิวซีสต์"
+                        
                         acne_percentages[thai_label] = round((count / total_acne_count) * 100, 2)
 
                     
                     for label, count in acne_counts.items():
-                        if label == "white":
+                        if label == "white": 
                             edge_scores["eat"] += (16 * count)
                             edge_scores["hor"] += (20 * count)
                             edge_scores["lif"] += (12 * count)
                             edge_scores["cle"] += (18 * count)
-                        elif label == "black":
+                        elif label == "Black":
                             edge_scores["eat"] += (12 * count)
                             edge_scores["hor"] += (16 * count)
                             edge_scores["lif"] += (10 * count)
                             edge_scores["cle"] += (20 * count)
-                        elif label == "papular":
+                        elif label == "papular": 
                             edge_scores["eat"] += (20 * count)
                             edge_scores["hor"] += (18 * count)
                             edge_scores["lif"] += (18 * count)
                             edge_scores["cle"] += (14 * count)
-                        elif label == "pustular":
+                        elif label == "pustular": 
                             edge_scores["eat"] += (20 * count)
                             edge_scores["hor"] += (16 * count)
                             edge_scores["lif"] += (20 * count)
                             edge_scores["cle"] += (14 * count)
-                        elif label == "cystic":
+                        elif label == "cystic": 
                             edge_scores["eat"] += (16 * count)
                             edge_scores["hor"] += (20 * count)
                             edge_scores["lif"] += (18 * count)
                             edge_scores["cle"] += (10 * count)
-
                 else:
                     acne_percentages = {"ไม่พบสิว หรือสภาพผิวปกติ": 100.0}
 
             except Exception as e:
                 print(f"Error calling Edge Impulse API: {e}")
                 acne_percentages = {"ไม่พบสิว หรือสภาพผิวปกติ": 100.0}
-
         else:
             acne_percentages = {"ไม่ได้อัปโหลดรูปภาพ": 100.0}
             
-       
         session['acne_results'] = acne_percentages
         session['edge_scores'] = edge_scores
-
         return render_template("form.html", sex=sex, age=age)
         
     return render_template("form.html")
@@ -151,7 +143,6 @@ def result():
     sex = session.get("sex") 
     acne_results = session.get('acne_results', {})
     edge_scores = session.get('edge_scores', {"eat": 0, "hor": 0, "lif": 0, "cle": 0})
-
     per_hor = per_cle = per_lif = per_eat = 0
 
     try:
@@ -170,7 +161,6 @@ def result():
             score_sweet = int(request.form.get("choice8", 0))       
             score_greasy = int(request.form.get("choice9", 0))
 
-           
             score_all = (score_age + score_gender_specific + 
                         score_pillow + score_cleansing + 
                         score_sleep + score_touch + 
@@ -178,7 +168,6 @@ def result():
                         edge_scores["eat"] + edge_scores["hor"] + 
                         edge_scores["lif"] + edge_scores["cle"])
 
-            
             if score_all > 0:
                 per_all = score_all / 100
                 sco_hor = score_age + score_gender_specific + edge_scores["hor"]
@@ -193,13 +182,15 @@ def result():
                 sco_eat = score_sweet + score_greasy + edge_scores["eat"]
                 per_eat = round((sco_eat / per_all), 2)
 
-                
                 session['per_hor'] = per_hor
                 session['per_cle'] = per_cle
                 session['per_lif'] = per_lif
                 session['per_eat'] = per_eat
+            else:
+                # แก้ไขจุดเติมบล็อก else ป้องกันตัวแปรตกหล่นเมื่อคะแนนรวมเป็น 0
+                per_hor = per_cle = per_lif = per_eat = 0
+                session['per_hor'] = session['per_cle'] = session['per_lif'] = session['per_eat'] = 0
         else:
-            
             per_hor = session.get('per_hor', 0)
             per_cle = session.get('per_cle', 0)
             per_lif = session.get('per_lif', 0)
